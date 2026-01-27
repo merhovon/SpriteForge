@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "spriteforge"
+version = "1.0.0"
+description = "Forge your sprites with precision - A modern tool for extracting sprites from images. Perfect for AI/ML and game development."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "GPL-3.0-or-later"}
+authors = [
+    {name = "merhovon", email = "merhovon@users.noreply.github.com"}
+]
+keywords = ["spriteforge", "sprite", "extractor", "forge", "unique color", "ai", "ml", "image processing", "game-dev"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Topic :: Multimedia :: Graphics :: Editors :: Raster-Based",
+    "Intended Audience :: Developers",
+    "Natural Language :: English",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+dependencies = [
+    "numpy>=1.21.0",
+    "flet>=0.25.0",
+    "pillow>=10.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/merhovon/SpriteForge"
+Repository = "https://github.com/merhovon/SpriteForge"
+Issues = "https://github.com/merhovon/SpriteForge/issues"
+
+[project.scripts]
+spriteforge = "spriteforge.app:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["spriteforge*"]
+exclude = ["tests*"]
