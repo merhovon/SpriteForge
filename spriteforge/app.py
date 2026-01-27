@@ -21,6 +21,8 @@ class SpriteForgeApp:
         self.page.title = "SpriteForge - Forge Your Sprites"
         self.page.theme_mode = ft.ThemeMode.DARK
         self.page.padding = 0
+        self.page.window.width = 1400
+        self.page.window.height = 900
         
         # State
         self.processor: Optional[ImageProcessor] = None
@@ -51,19 +53,20 @@ class SpriteForgeApp:
         self.progress_bar = ft.ProgressBar(
             width=400,
             visible=False,
-            color=ft.colors.GREEN,
-            bgcolor=ft.colors.GREY_300
+            color=ft.Colors.GREEN,
+            bgcolor=ft.Colors.GREY_300
         )
         
         # Image viewer area
         self.image_widget = ft.Image(
-            fit=ft.ImageFit.CONTAIN,
+            src="",  # Required in Flet 0.80+, will be set dynamically
+            fit=ft.BoxFit.CONTAIN,
             visible=False
         )
         
         self.selection_rect = ft.Container(
-            border=ft.border.all(2, ft.colors.YELLOW),
-            bgcolor=ft.colors.with_opacity(0.3, ft.colors.GREEN),
+            border=ft.Border.all(2, ft.Colors.YELLOW),
+            bgcolor=ft.Colors.with_opacity(0.3, ft.Colors.GREEN),
             visible=False
         )
         
@@ -79,8 +82,8 @@ class SpriteForgeApp:
         self.image_container = ft.Container(
             content=image_stack,
             expand=True,
-            bgcolor=ft.colors.GREY_900,
-            alignment=ft.alignment.center,
+            bgcolor=ft.Colors.GREY_900,
+            alignment=ft.Alignment.CENTER,
             on_click=self.on_image_click
         )
         
@@ -104,53 +107,53 @@ class SpriteForgeApp:
                     ft.Divider(),
                     
                     # Load image button
-                    ft.ElevatedButton(
+                    ft.Button(
                         "Load Image",
-                        icon=ft.icons.FOLDER_OPEN,
+                        icon=ft.Icons.FOLDER_OPEN,
                         on_click=self.load_image_dialog,
-                        bgcolor=ft.colors.BLUE_700
+                        bgcolor=ft.Colors.BLUE_700
                     ),
                     
                     ft.Divider(),
                     ft.Text("Selection Tools", weight=ft.FontWeight.BOLD),
                     
-                    ft.ElevatedButton(
+                    ft.Button(
                         "Select Region",
-                        icon=ft.icons.SELECT_ALL,
+                        icon=ft.Icons.SELECT_ALL,
                         on_click=self.start_selection_mode,
-                        bgcolor=ft.colors.GREEN_700
+                        bgcolor=ft.Colors.GREEN_700
                     ),
                     
-                    ft.ElevatedButton(
+                    ft.Button(
                         "Copy Region",
-                        icon=ft.icons.COPY,
+                        icon=ft.Icons.COPY,
                         on_click=self.copy_region_to_clipboard,
                     ),
                     
                     ft.Divider(),
                     ft.Text("Extract Operations", weight=ft.FontWeight.BOLD),
                     
-                    ft.ElevatedButton(
+                    ft.Button(
                         "Extract Sprite",
-                        icon=ft.icons.IMAGE,
+                        icon=ft.Icons.IMAGE,
                         on_click=self.extract_sprite,
                     ),
                     
-                    ft.ElevatedButton(
+                    ft.Button(
                         "Unique Colors",
-                        icon=ft.icons.PALETTE,
+                        icon=ft.Icons.PALETTE,
                         on_click=self.extract_unique_colors,
                     ),
                     
-                    ft.ElevatedButton(
+                    ft.Button(
                         "Unique Sprite",
-                        icon=ft.icons.AUTO_FIX_HIGH,
+                        icon=ft.Icons.AUTO_FIX_HIGH,
                         on_click=self.extract_unique_sprite,
                     ),
                     
-                    ft.ElevatedButton(
+                    ft.Button(
                         "Transparent Sprite",
-                        icon=ft.icons.LAYERS,
+                        icon=ft.Icons.LAYERS,
                         on_click=self.extract_transparent_sprite,
                     ),
                     
@@ -182,7 +185,7 @@ class SpriteForgeApp:
             ),
             width=300,
             padding=20,
-            bgcolor=ft.colors.GREY_800
+            bgcolor=ft.Colors.GREY_800
         )
         
         # Main layout
@@ -203,7 +206,7 @@ class SpriteForgeApp:
     
     def _create_info_text(self, text: str) -> ft.Text:
         """Create an info label"""
-        return ft.Text(text, size=12, color=ft.colors.WHITE70)
+        return ft.Text(text, size=12, color=ft.Colors.WHITE70)
     
     def _update_info_label(self, key: str, value: str):
         """Update an info label"""
@@ -211,21 +214,16 @@ class SpriteForgeApp:
             self.info_labels[key].value = value
             self.info_labels[key].update()
     
-    def load_image_dialog(self, e):
+    async def load_image_dialog(self, e):
         """Open file picker to select an image"""
-        def on_file_pick(result: ft.FilePickerResultEvent):
-            if result.files:
-                file_path = result.files[0].path
-                self.load_image(file_path)
-        
-        file_picker = ft.FilePicker(on_result=on_file_pick)
-        self.page.overlay.append(file_picker)
-        self.page.update()
-        
-        file_picker.pick_files(
+        files = await ft.FilePicker().pick_files(
             allowed_extensions=["png", "jpg", "jpeg", "bmp", "gif"],
             dialog_title="Select an image"
         )
+        
+        if files:
+            file_path = files[0].path
+            self.load_image(file_path)
     
     def load_image(self, file_path: str):
         """Load and display an image"""
@@ -313,7 +311,7 @@ class SpriteForgeApp:
             ], tight=True, height=200),
             actions=[
                 ft.TextButton("Cancel", on_click=lambda e: self.close_dialog(dialog)),
-                ft.ElevatedButton("Confirm", on_click=on_confirm),
+                ft.Button("Confirm", on_click=on_confirm),
             ]
         )
         
@@ -451,7 +449,7 @@ class SpriteForgeApp:
         """Show a snack bar message"""
         self.page.snack_bar = ft.SnackBar(
             content=ft.Text(message),
-            bgcolor=ft.colors.GREEN if success else ft.colors.RED_700
+            bgcolor=ft.Colors.GREEN if success else ft.Colors.RED_700
         )
         self.page.snack_bar.open = True
         self.page.update()
@@ -467,7 +465,7 @@ def main():
     def app_main(page: ft.Page):
         SpriteForgeApp(page)
     
-    ft.app(target=app_main)
+    ft.run(main=app_main)
 
 
 if __name__ == "__main__":
