@@ -58,7 +58,7 @@ jobs:
       id: changelog
       run: |
         $version = "${{ github.ref_name }}"
-        $versionNumber = $version -replace '^v', ''  # Remove 'v' prefix (v1.0.0 -> 1.0.0)
+        $versionNumber = $version -replace '^v', ''
         $changelog = Get-Content CHANGELOG.md -Raw
         
         # Extract section for this version (matches [1.0.0])
@@ -71,37 +71,34 @@ jobs:
           echo "No specific changelog found for version $versionNumber"
         }
         
-        # Add installation instructions
-        $releaseNotes = @"
-$versionChangelog
-
----
-
-## 📦 Windows Installation
-
-**Standalone Executable (keine Python-Installation nötig)**
-
-**SHA256 Checksum:**
-``````
-${{ steps.hash.outputs.sha256 }}
-``````
-
-**System Requirements:**
-- Windows 10 oder höher
-- Keine Python-Installation erforderlich
-
-**Installation:**
-1. Laden Sie ``SpriteForge-$version-Windows.exe`` herunter
-2. Doppelklick zum Starten (Windows Defender SmartScreen ggf. bestätigen)
-
-**Alternative Installation via pip:**
-``````bash
-pip install spriteforge==$versionNumber
-``````
-"@
+        # Create release notes file
+        $versionChangelog | Out-File -FilePath changelog_section.txt -Encoding utf8
         
-        # Save to file
-        $releaseNotes | Out-File -FilePath changelog_section.txt -Encoding utf8
+        # Add separator and installation instructions
+        "" | Out-File -FilePath changelog_section.txt -Append -Encoding utf8
+        "---" | Out-File -FilePath changelog_section.txt -Append -Encoding utf8
+        "" | Out-File -FilePath changelog_section.txt -Append -Encoding utf8
+        "## 📦 Windows Installation" | Out-File -FilePath changelog_section.txt -Append -Encoding utf8
+        "" | Out-File -FilePath changelog_section.txt -Append -Encoding utf8
+        "**Standalone Executable (keine Python-Installation nötig)**" | Out-File -FilePath changelog_section.txt -Append -Encoding utf8
+        "" | Out-File -FilePath changelog_section.txt -Append -Encoding utf8
+        "**SHA256 Checksum:**" | Out-File -FilePath changelog_section.txt -Append -Encoding utf8
+        '```' | Out-File -FilePath changelog_section.txt -Append -Encoding utf8
+        "${{ steps.hash.outputs.sha256 }}" | Out-File -FilePath changelog_section.txt -Append -Encoding utf8
+        '```' | Out-File -FilePath changelog_section.txt -Append -Encoding utf8
+        "" | Out-File -FilePath changelog_section.txt -Append -Encoding utf8
+        "**System Requirements:**" | Out-File -FilePath changelog_section.txt -Append -Encoding utf8
+        "- Windows 10 oder höher" | Out-File -FilePath changelog_section.txt -Append -Encoding utf8
+        "- Keine Python-Installation erforderlich" | Out-File -FilePath changelog_section.txt -Append -Encoding utf8
+        "" | Out-File -FilePath changelog_section.txt -Append -Encoding utf8
+        "**Installation:**" | Out-File -FilePath changelog_section.txt -Append -Encoding utf8
+        "1. Laden Sie ``SpriteForge-$version-Windows.exe`` herunter" | Out-File -FilePath changelog_section.txt -Append -Encoding utf8
+        "2. Doppelklick zum Starten (Windows Defender SmartScreen ggf. bestätigen)" | Out-File -FilePath changelog_section.txt -Append -Encoding utf8
+        "" | Out-File -FilePath changelog_section.txt -Append -Encoding utf8
+        "**Alternative Installation via pip:**" | Out-File -FilePath changelog_section.txt -Append -Encoding utf8
+        '```bash' | Out-File -FilePath changelog_section.txt -Append -Encoding utf8
+        "pip install spriteforge==$versionNumber" | Out-File -FilePath changelog_section.txt -Append -Encoding utf8
+        '```' | Out-File -FilePath changelog_section.txt -Append -Encoding utf8
     
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
