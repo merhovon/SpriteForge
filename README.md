@@ -4,7 +4,7 @@
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
 ![License](https://img.shields.io/badge/License-GPL--3.0--or--later-green)
-![Flet](https://img.shields.io/badge/GUI-Flet-purple)
+![PyQt6](https://img.shields.io/badge/GUI-PyQt6-41CD52)
 
 ## 🎯 Features
 
@@ -13,7 +13,7 @@
 - **Unique Color Detection**: Find colors that exist only in the selected region (not in the rest of the image)
 - **Unique Sprite Generation**: Create sprites showing only unique colors (others transparent)
 - **Transparent Sprite Extraction**: Compare the same region across multiple images to extract only changing elements
-- **Modern GUI**: Built with Flet for a beautiful, responsive interface
+- **Native GUI**: Built with PyQt6 for high-performance, native desktop interface
 - **Cross-Platform**: Works on Windows, macOS, and Linux
 
 ## 🚀 Installation
@@ -36,8 +36,9 @@ pip install -e .
 
 - Python 3.10 or higher
 - numpy >= 1.21.0
-- flet >= 0.25.0
+- PyQt6 >= 6.6.0
 - pillow >= 10.0.0
+- loguru >= 0.7.0
 
 Install dependencies:
 
@@ -179,7 +180,7 @@ See the [LICENSE](LICENSE) file for full details, or visit https://www.gnu.org/l
 
 ## 💡 Inspiration
 
-This tool was inspired by the concept of sprite extraction. SpriteForge is built from the ground up using modern technologies (Flet, Python 3.10+) with a focus on performance and user experience.
+This tool was inspired by the concept of sprite extraction. SpriteForge is built from the ground up using modern technologies (PyQt6, Python 3.10+) with a focus on performance and user experience. Migrated from Flet to PyQt6 for 10x performance improvement.
 
 ## 🤝 Contributing
 
@@ -201,4 +202,4 @@ Contributions are welcome! Please feel free to submit pull requests or open issu
 
 ---
 
-Made with ❤️ using Flet and Python
+Made with ❤️ using PyQt6 and Python

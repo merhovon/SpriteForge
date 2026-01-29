@@ -216,3 +216,5 @@ dist/
 
 # Deprecated old package names
 *spritex*.egg-info/
+AGENTS.md
+TODO.md

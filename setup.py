@@ -19,8 +19,9 @@ setup(
     python_requires='>=3.10',
     install_requires=[
         'numpy>=1.21.0',
-        'flet>=0.25.0',
-        'pillow>=10.0.0'
+        'PyQt6>=6.6.0',
+        'pillow>=10.0.0',
+        'loguru>=0.7.0'
     ],
     entry_points={
         'console_scripts': ['spriteforge = spriteforge.app:main'],

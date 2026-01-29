@@ -19,4 +19,4 @@ __license__ = "GPL-3.0-or-later"
 
 from .app import main
 
-__all__ = ['main']
+__all__ = ["main"]
