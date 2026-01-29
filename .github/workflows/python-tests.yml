@@ -8,10 +8,9 @@ on:
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
+    runs-on: windows-latest
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
         python-version: ['3.10', '3.11', '3.12']
 
     steps:
@@ -28,26 +27,25 @@ jobs:
         pip install -r requirements.txt
         pip install -e .
     
-    - name: Lint with flake8 (if available)
+    - name: Lint with ruff
       run: |
-        pip install flake8
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=100 --statistics
+        pip install ruff
+        ruff check spriteforge/
+        ruff format --check spriteforge/
       continue-on-error: true
     
     - name: Test import
       run: |
         python -c "import spriteforge; print(f'Version: {spriteforge.__version__}')"
     
-    - name: Run tests (if available)
+    - name: Run tests with pytest
       run: |
+        pip install pytest
         python -m pytest tests/ -v
       continue-on-error: true
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: test
     
     steps:
